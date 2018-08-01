@@ -1,0 +1,31 @@
+<p class="pageHeader">All Managers</p>
+
+
+<div>
+    <a href="/managers/new" class="button center">New Manager</a>
+</div>
+<br>
+<div class="container">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Team Name</th>
+
+        </tr>
+
+        #foreach($manager in $managers)
+        <tr>
+            <td><a href="/managers/$manager.getId()/edit">$manager.getName()</a></td>
+            <td>$manager.getPhoneNo()</td>
+            <td>$manager.getEmail()</td>
+            <td>$manager.getTeam().getName()</td>
+            <td>
+                </form>
+            </td>
+        </tr>
+        #end
+    </table>
+</div>
+

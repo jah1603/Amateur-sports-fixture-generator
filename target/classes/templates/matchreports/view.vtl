@@ -1,0 +1,24 @@
+<br>
+<table class="center" align="center">
+    <tr>
+        <th><a href="/matchreports/$matchreport.getId()">Week $matchreport.getFixture().getWeek(), Match $matchreport.getFixture().getMatch() - $matchreport.getHeadline()</a></th>
+    </tr>
+
+    <tr>
+        <td>$matchreport.getBlurb()</td>
+    </tr>
+</table>
+<table class="center" align="center">
+    <tr>
+        <td align="center">
+            <form method="get" action="/matchreports/$matchreport.getId()/edit">
+                <input type="submit" value="Edit report" align="center">
+            </form>
+        </td>
+        <td align="center">
+            <form action="/matchreports/$matchreport.getId()/delete" method="post">
+                <input type="submit" value="Delete report" align="center">
+            </form>
+        </td>
+    </tr>
+</table>

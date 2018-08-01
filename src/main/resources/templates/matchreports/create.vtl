@@ -1,0 +1,31 @@
+<h1 align="center"> Create new match report</h1>
+
+<form action="/$fixture.getId()/matchreports" method="post">
+    <table class="center" align="center">
+        <tr>
+            <td>
+    <label for="headline" align="center">Headline:</label>
+    <input  type="text" name="headline" id="headline" required align="center">
+            </td>
+
+            <td>
+    <label for="blurb" align="center">Blurb:</label>
+    <input type="text" name="blurb" id="blurb" required align="center">
+            </td>
+
+            <td>
+    <label for="picture" align="center">Picture:</label>
+    <input type="text" name="picture" id="picture" required align="center">
+            <td>
+        </tr>
+    </table>
+
+    <br>
+        <table class="center" align="center">
+        <tr>
+            <td>
+            <input type="submit" value="Save Report" align="center">
+            </td>
+        </tr>
+        </table>
+</form>

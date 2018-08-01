@@ -1,0 +1,16 @@
+<h1>Edit Manager</h1>
+<br>
+<form action="/managers/$manager.getId()" method="post">
+    <label for="name">First Name:</label>
+
+    <input type="text" name="name" id="name" value="$manager.getName()" required>
+
+    <label for="phone">Last Name:</label>
+    <input type="text" name="phone" id="phone" value="$manager.getPhoneNo()" required>
+
+    <label for="email">Email:</label>
+    <input type="text" name="email" id="email" value="$manager.getEmail()" required>
+
+    <input type="submit" value="Update Manager">
+
+</form>

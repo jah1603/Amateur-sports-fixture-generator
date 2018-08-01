@@ -1,0 +1,43 @@
+<h1> $league.getName() edit page</h1>
+
+<form method="post" action="/leagues/$league.getId()/update">
+    <label for="name"> Name </label>
+    <input type="text" value="$league.getName()" name = "name" id = "name" required>
+
+    <table>
+        <tr>
+            <th>Team Name</th>
+            <th>League</th>
+        </tr>
+
+        #foreach($team in $leaguesTeams)
+        <tr>
+
+            <td>$team.getName()</td>
+            <td>$team.getLeague().getRegion()</td>
+
+            <br>
+            <td>
+
+                <a href = "footballteams/$team.getId()"> Further information</a>
+
+                <a href="footballteams/$team.getId()/edit">Edit this team</a>
+
+
+                <br>
+            </td>
+        </tr>
+        #end
+    </table>
+
+    <select name = "league_type" id ="league_type">
+        #foreach ($leagueType in $leagueTypes)
+        <option value="$leagueType")> $leagueType.getLeagueType()</option>
+        #end
+    </select>
+
+    <form action="/leagues/$league.getId()/update" method="post">
+    <input type = "submit" value = "edit">
+    </form>
+
+</form>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FixturePal</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Nunito+Sans|Open+Sans|Rajdhani|Volkhov" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet"  type ="text/css" href="/menus.css">
+    <link rel="stylesheet"  type ="text/css" href="/style.css">
+    <link rel="stylesheet"  type ="text/css" href="/index.css">
+    <link rel="stylesheet"  type ="text/css" href="/table.css">
+</head>
+<body>
+<nav>
+    <div class ="dropdown">
+    <button class="dropbtn">Home
+    <i class ="home_button"></i></button>
+    <div class="dropdown-content">
+    <a href ="/all" class="button center"> Home </a>
+    </div>
+</div>
+
+
+    <div class = "dropdown">
+        <button class="dropbtn">Teams</button>
+        <div class ="dropdown-content">
+            <a href="/footballteams">Football Teams</a>
+        </div>
+    </div>
+
+    <div class ="dropdown">
+        <button class ="dropbtn">Leagues</button>
+        <div class ="dropdown-content">
+        <a href = "/leagues"> All leagues</a>
+        <a href = "/leagues/new"> Create a new league</a>
+            #foreach ($league in $leagues)
+            <a href="leagues/$league.getId()"> $league.getName()'s page </a>
+            #end
+        </div>
+    </div>
+
+    <div class = "dropdown">
+        <button class="dropbtn"> Match Reports</button>
+        <div class="dropdown-content">
+            <a href ="/matchreports"> All Match reports</a>
+
+        </div>
+    </div>
+
+    <div class = "dropdown">
+        <button class="dropbtn">Fixtures and Results</button>
+        <div class="dropdown-content">
+    <a href="/fixtures" class="button center"> All Fixtures</a>
+        </div>
+    </div>
+
+</div>
+</nav>
+<!-- begin inner template-->
+<div class="container">
+    #parse( $template )
+</div>
+<!-- end inner template-->
+
+</body>
+</html>

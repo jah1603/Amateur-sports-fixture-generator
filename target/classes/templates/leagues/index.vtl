@@ -1,0 +1,54 @@
+<h1 id = "header_text">Current Active Leagues</h1>
+
+<div class="container">
+
+
+    <table align = "center">
+        <tr>
+            <th align = "center">League Name</th>
+            <th align = "center">League Region</th>
+            <th align = "center">League Type</th>
+        </tr>
+
+        #foreach($league in $leagues)
+        <tr>
+
+            <td align = "center">$league.getName()</td>
+            <td align = "center">$league.getRegion()</td>
+            <td align = "center">$league.getLeagueType()</td>
+
+            <td>
+
+                <form action = "/leagues/$league.getId()" method="get">
+                <input type="submit" value="View league hub" align = "center">
+            </form>
+
+
+                <form action = "/leagues/$league.getId()/edit" method="get">
+                    <input type="submit" value="Edit" align = "center">
+                </form>
+
+                #if ($league.getFixtures() == [])
+                <form action = "/$league.getId()/teams/new" method="get">
+                    <input type="submit" value="Add teams to league" align = "center">
+                </form>
+                #end
+
+
+                #if ($league.getFixtures() == [] and $league.getTeams() != [])
+                <form action = "/leagues/$league.getId()/generate" method="get">
+                    <input type="submit" value="Generate Fixtures" align = "center">
+                </form>
+                #end
+            </td>
+        </tr>
+        #end
+    </table>
+
+
+    <div style="text-align:center;">
+    <form action = "/leagues/new" align = "center">
+        <input type="submit" value="Create a new league" >
+    </form>
+    </div>
+</div>

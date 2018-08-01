@@ -1,0 +1,133 @@
+<p class="pageHeader" align="center">Upcoming fixtures</p>
+
+<div class="dropdown">
+    <button class="dropbtn">Dropdown
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class = "dropdown-content">
+        <a href = "/leagues">Leagues</a>
+        <a href = "/all">Home</a>
+        <a href = "/footballteams">Football Teams</a>
+
+    </div>
+</div>
+
+<form action="/leagues/$league.getId()/fixtures/$fixture.getId()" method="get">
+    <select>
+        <option value = "default"> -select a league- </option>
+        #foreach ($league in $allLeagues)
+        <option value="$league.getId()" onclick="$league.getFixtures()">$league.getName()</option>
+        #end
+    </select>
+    <input type="button" value="select league">
+</form>
+
+
+
+#foreach($fixture in $leaguesFixtures)
+#if ($fixture.returnHomeTeam().getManager().getName() == "Ghost manager")
+<table class="center" align="center">
+</table>
+
+#elseif ($fixture.returnAwayTeam().getManager().getName() == "Ghost manager")
+<table class="center" align="center">
+</table>
+
+
+
+#elseif ($fixture.getHomeGoals() == "")
+<form action="/$league.getId()/fixtures/$fixture.getId()" method="post">
+    <table class="center" align="center">
+
+        <tr>
+            <th>Week $fixture.getWeek(), Match $fixture.getMatch() </th>
+        </tr>
+        <p></p>
+        <tr>
+
+            <th><a href="/footballteams/$fixture.returnHomeTeam().getId()">$fixture.returnHomeTeam().getName()</a>
+                <input type = "text" required name = "homegoals" id = "homegoals" style = "width: 6px;" value = "$fixture.getHomeGoals()">  - <input type =  "text" required name = "awaygoals" id = "awaygoals" style = "width: 6px;"value = "$fixture.getAwayGoals()">   <a href="/teams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+        </tr>
+
+        <tr>
+            <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input type="submit" value="Enter result" align="center">
+            </td>
+        </tr>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </table>
+</form>
+
+#elseif ($fixture.getMatchReport().getHeadline().length() >= 0)
+<table class="center" align="center">
+
+    <tr>
+        <th>Week $fixture.getWeek(), Match $fixture.getMatch() </th>
+    </tr>
+    <p></p>
+    <tr>
+
+        <th><a href="/footballteams/$fixture.returnHomeTeam().getId()">$fixture.returnHomeTeam().getName()</a>
+            $fixture.getHomeGoals() - $fixture.getAwayGoals()   <a href="/teams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+    </tr>
+
+    <tr>
+        <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+    </tr>
+    <td align="center">
+        <form method="get" action="/matchreports/$fixture.getMatchReport().getId()">
+            <input type="submit" value="View match report" align="center">
+        </form>
+    </td>
+    <tr>
+    </tr>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+</table>
+
+#else
+<table class="center" align="center">
+
+    <tr>
+        <th>Week $fixture.getWeek(), Match $fixture.getMatch() </th>
+    </tr>
+    <p></p>
+    <tr>
+
+        <th><a href="/footballteams/$fixture.returnHomeTeam().getId()">$fixture.returnHomeTeam().getName()</a>
+            $fixture.getHomeGoals() - $fixture.getAwayGoals()   <a href="/teams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+    </tr>
+
+    <tr>
+        <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+    </tr>
+    <td align="center">
+        <form method="get" action="/$fixture.getId()/matchreports/new">
+            <input type="submit" value="Add report" align="center">
+        </form>
+    </td>
+    <tr>
+    </tr>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+</table>
+
+#end
+
+#end

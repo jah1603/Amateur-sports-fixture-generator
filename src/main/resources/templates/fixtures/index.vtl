@@ -1,0 +1,135 @@
+<h1 class="pageHeader" align="center">Upcoming fixtures</h1>
+
+
+#foreach($fixture in $fixtures)
+
+#if ($fixture.returnHomeTeam().getManager().getName() == "Ghost manager")
+#elseif ($fixture.returnAwayTeam().getManager().getName() == "Ghost manager")
+#elseif ($fixture.getHomeGoals() == "")
+<form action="fixtures/$fixture.getId()" method="post">
+        <table class="center" align="center">
+            <table class="center" align="center">
+            <td>
+            <tr>
+                <th>$fixture.getLeague().getName() </th>
+            </tr>
+            <tr>
+                <td align="center">Week $fixture.getWeek(), Match $fixture.getMatch() </td>
+            </tr>
+            </table>
+            <table class="center" align="center">
+            <tr>
+                <td>
+                <th><a href="/footballteams/$fixture.returnHomeTeam().getId()"> <img src="$fixture.returnHomeTeam().getTeamLogo()" height="50rem" style="vertical-align:middle" hspace="23"> $fixture.returnHomeTeam().getName()</a>
+                <input type = "text" required name = "homegoals" id = "homegoals" style = "width: 12px;" value = "$fixture.getHomeGoals()">  - <input type =  "text" required name = "awaygoals" id = "awaygoals" style = "width: 12px;" value = "$fixture.getAwayGoals()">   <a href="/footballteams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+                </td>
+                <td>
+                    <img src="$fixture.returnAwayTeam().getTeamLogo()" height="50rem" hspace="23" style="vertical-align:middle">
+                </td>
+
+            </tr>
+            </table>
+            <table align="center">
+        <tr>
+            <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input type="submit" value="Enter result" align="center">
+            </td>
+        </tr>
+            </table>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </table>
+
+</form>
+<hr>
+#elseif ($fixture.getMatchReport().getHeadline().length() >= 0)
+<table class="center" align="center">
+    <table class="center" align="center">
+
+    <tr>
+        <th>$fixture.getLeague().getName() </th>
+    </tr>
+    <tr>
+        <td align="center">Week $fixture.getWeek(), Match $fixture.getMatch() </td>
+    </tr>
+    </table>
+    <table align="center">
+    <tr>
+        <th><a href="/footballteams/$fixture.returnHomeTeam().getId()"> <img src="$fixture.returnHomeTeam().getTeamLogo()" height="50rem" style="vertical-align:middle" hspace="23"> $fixture.returnHomeTeam().getName()</a>
+            $fixture.getHomeGoals() - $fixture.getAwayGoals()   <a href="/footballteams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+        <td>
+            <img src="$fixture.returnAwayTeam().getTeamLogo()" height="50rem" hspace="23" style="vertical-align:middle">
+        </td>
+    </tr>
+    </table>
+    <table align="center">
+    <tr>
+        <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+    </tr>
+        <tr>
+            <td align="center">
+                <form method="get" action="/matchreports/$fixture.getMatchReport().getId()">
+                    <input type="submit" value="View match report" align="center">
+                </form>
+            </td>
+        </tr>
+    </table>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+</table>
+<hr>
+#else
+<table class="center" align="center">
+    <table class="center" align="center">
+
+        <tr>
+            <th>$fixture.getLeague().getName() </th>
+        </tr>
+        <tr>
+            <td align="center">Week $fixture.getWeek(), Match $fixture.getMatch() </td>
+        </tr>
+    </table>
+    <table align="center">
+        <tr>
+            <th><a href="/footballteams/$fixture.returnHomeTeam().getId()"> <img src="$fixture.returnHomeTeam().getTeamLogo()" height="50rem" style="vertical-align:middle" hspace="23"> $fixture.returnHomeTeam().getName()</a>
+                $fixture.getHomeGoals() - $fixture.getAwayGoals()   <a href="/footballteams/$fixture.returnAwayTeam().getId()">$fixture.returnAwayTeam().getName()</a></th>
+            <td>
+                <img src="$fixture.returnAwayTeam().getTeamLogo()" height="50rem" hspace="23" style="vertical-align:middle">
+            </td>
+        </tr>
+    </table>
+    <table align="center">
+        <tr>
+            <td align="center">$fixture.returnHomeTeam().getLocation()</td>
+        </tr>
+        <tr>
+            <td align="center">
+                <form method="get" action="/$fixture.getId()/matchreports/new">
+                    <input type="submit" value="Add match report" align="center">
+                </form>
+            </td>
+        </tr>
+    </table>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+</table>
+<hr>
+
+
+#end
+#end

@@ -1,0 +1,37 @@
+<h1 class="pageHeader">All Teams</h1>
+
+<br>
+<div class="container">
+    <table align="center">
+        <tr>
+            <th>Team Name</th>
+            <th>League</th>
+            <th>League Region</th>
+            <th>Points</th>
+
+        </tr>
+
+        #foreach($team in $teamList)
+        <tr>
+            <td>$team.getName()</td>
+            <td>$team.getLeague().getName()</td>
+            <td>$team.getLeague().getRegion()</td>
+            <td>$team.getPoints()</td>
+
+            <td>
+
+                <form action = "/footballteams/$team.getId()" method="get">
+                    <input type="submit" value="Team Information">
+                </form>
+
+                <form action = "footballteams/$team.getId()/edit" method="get">
+                    <input type="submit" value="Edit team">
+                </form>
+            </td>
+
+        </tr>
+        #end
+
+    </table>
+
+</div>
