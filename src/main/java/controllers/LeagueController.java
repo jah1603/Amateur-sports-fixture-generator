@@ -71,15 +71,26 @@ public class LeagueController {
 
                 League league = DBHelper.find(leagueId, League.class);
                 model.put("league", league);
-                List <Team> sortedLeague =  DBLeague.sortLeagueByPoints(league);
+                List <FootballTeam> sortedLeague =  DBLeague.sortLeagueByPoints(league);
                 model.put("teams", sortedLeague);
 
+                for (FootballTeam team : sortedLeague){
+                    team.setLeaguePosition(sortedLeague.indexOf(team) + 1);
+                }
 
-                List<Fixture> fixtures = DBFixture.sortLeaguesFixturesByWeeks(league);
+
+                List<Fixture> fixtures = DBLeague.getFixturesForLeague(league);
                 model.put("fixtures", fixtures);
 
+//                for (Fixture fixture: fixtures){
+//                    fixture.setLeague(league);
+//                }
+
                 for (Fixture fixture: fixtures){
-                    fixture.setLeague(league);
+                    if (fixture.getLeague().ghostInLeague())
+                    {
+                        fixture.setMatch(fixture.getMatch() - 1);
+                    }
                 }
 
                 for (Fixture fixture: fixtures){
@@ -89,9 +100,86 @@ public class LeagueController {
                     }
                 }
 
-                for (Fixture fixture: fixtures){
-                    DBHelper.update(fixture);
+//                for (int week = 0; week < (2 * ((league.teamCount()) -1)); week++) {
+//                    for (int match = 0; week < (((league.teamCount()) / 2) - 1); match++) {
+//                            if (league.ghostInNewLeague()) {
+//                                league.returnSeason().get(week).get(match).setMatch(match - 1);
+//                            }
+//                        }
+//                    }
+
+//                for (int week = 0; week < (2 * ((league.teamCount()) -1)); week++) {
+//                    for (int match = 0; week < (((league.teamCount()) / 2) - 1); match++) {
+//                        if (league.ghostInLeague()) {
+//                            league.returnSeason().get(week).get(match).setMatch(match - 1);
+//                        }
+//                    }
+//                }
+
+
+                model.put("template", "templates/leagues/view.vtl");
+
+                DBLeague.sortLeagueByPoints(league);
+
+                return new ModelAndView(model, "templates/layout.vtl");
+
+
+            }, new VelocityTemplateEngine());
+
+
+            get(":id/leagues/:id", (req, res) -> {
+                Map<String, Object> model = new HashMap<>();
+                int leagueId = Integer.parseInt(req.params(":id"));
+
+                List<League> allLeauges = DBHelper.getAll(League.class);
+                model.put("leagues", allLeauges);
+
+                League league = DBHelper.find(leagueId, League.class);
+                model.put("league", league);
+                List <FootballTeam> sortedLeague =  DBLeague.sortLeagueByPoints(league);
+                model.put("teams", sortedLeague);
+
+                for (FootballTeam team : sortedLeague){
+                    team.setLeaguePosition(sortedLeague.indexOf(team) + 1);
                 }
+
+                List<Fixture> fixtures = DBLeague.getFixturesForLeague(league);
+                model.put("fixtures", fixtures);
+
+                for (Fixture fixture: fixtures){
+                    fixture.setLeague(league);
+                }
+
+                for (Fixture fixture: fixtures){
+                    if (fixture.getLeague().ghostInLeague())
+                    {
+                        fixture.setMatch(fixture.getMatch() - 1);
+                    }
+                }
+
+                for (Fixture fixture: fixtures){
+                    if (fixture.getLeague().ghostInNewLeague())
+                    {
+                        fixture.setMatch(fixture.getMatch() - 1);
+                    }
+                }
+
+//                for (int week = 0; week < (2 * ((league.teamCount()) -1)); week++) {
+//                    for (int match = 0; week < (((league.teamCount()) / 2) - 1); match++) {
+//                            if (league.ghostInNewLeague()) {
+//                                league.returnSeason().get(week).get(match).setMatch(match - 1);
+//                            }
+//                        }
+//                    }
+
+//                for (int week = 0; week < (2 * ((league.teamCount()) -1)); week++) {
+//                    for (int match = 0; week < (((league.teamCount()) / 2) - 1); match++) {
+//                        if (league.ghostInLeague()) {
+//                            league.returnSeason().get(week).get(match).setMatch(match - 1);
+//                        }
+//                    }
+//                }
+
 
                 model.put("template", "templates/leagues/view.vtl");
 

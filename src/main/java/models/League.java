@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchProfile;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class League {
     }
 
     public void setTeams(List<Team> teams) {
-        this.teams = teams;
+        this.teams = Collections.synchronizedList(teams);
     }
 
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
@@ -82,6 +83,10 @@ public class League {
     @Fetch(FetchMode.SELECT)
     public List<Fixture> getFixtures() {
         return fixtures;
+    }
+
+    public List<List<Fixture>> returnSeason(){
+        return this.season;
     }
 
     public void setFixtures(List<Fixture> fixtures) {
@@ -186,8 +191,11 @@ public class League {
                     away = numberofTeams - 1;
                 }
                 //  Create new fixture with home and away teams retrieved from the array of teams. Using the integers home and away.
-                Fixture fixture = new Fixture((week + 1), match + 1, this);
-                fixture.addTeamsToFixture(this.teams.get(home), this.teams.get(away));
+                Fixture fixture = new Fixture((week + 1), match + 1, this, this.teams.get(home), this.teams.get(away));
+                fixture.setHomeTeam(this.teams.get(home));
+                fixture.setAwayTeam(this.teams.get(away));
+//                ArrayList<Team> fixtureTeams = new ArrayList<Team>(Arrays.asList(this.teams.get(home), this.teams.get(away)));
+//                fixture.setTeams(fixtureTeams);
                 //Add the fixture above to the main list of round of fixtures
                 roundOfFixtures.add(fixture);
             }
@@ -215,7 +223,10 @@ public class League {
             //if week is odd set a new fixture which reassigns the zeroth position in the weekly fixtures array.
             if (week % 2 != 0) {
                 Fixture flippedFixture = fixturesList.get(week).get(0);
-                Collections.reverse(flippedFixture.getTeams());
+//                Collections.reverse(flippedFixture.getTeams());
+                Team currentHome = flippedFixture.getHomeTeam();
+                flippedFixture.setHomeTeam(flippedFixture.getAwayTeam());
+                flippedFixture.setAwayTeam(currentHome);
             }
             // if reverse fixtures are desired then set new object reverseFixtures to a new empty list of empty lists of fixtures
             // start for loop which loops through every weekly list of fixtures in our current list of lists (fixturesList)
@@ -230,8 +241,11 @@ public class League {
             for (List<Fixture> weekOfFixtures : fixturesList) {
                 List<Fixture> reversedWeek = new ArrayList<Fixture>();
                 for (Fixture fixture : weekOfFixtures) {
-                    Fixture tempfix = new Fixture((fixture.getWeek() + numberofTeams - 1), (fixture.getMatch()), this);
-                    tempfix.addTeamsToFixture(fixture.returnAwayTeam(), fixture.returnHomeTeam());
+                    Fixture tempfix = new Fixture((fixture.getWeek() + numberofTeams - 1), (fixture.getMatch()), this, fixture.returnAwayTeam(), fixture.returnHomeTeam());
+                    int homeTeamIndex = this.teams.indexOf(fixture.returnHomeTeam());
+                    int awayTeamIndex = this.teams.indexOf(fixture.returnAwayTeam());
+                    ;tempfix.setAwayTeam(this.teams.get(homeTeamIndex));
+                    tempfix.setHomeTeam(this.teams.get(awayTeamIndex));
                     reversedWeek.add(tempfix);
                 }
                 reverseFixtures.add(reversedWeek);
@@ -300,24 +314,18 @@ public class League {
     }
 
     public boolean ghostInLeague(){
-        this.generateFixtures(true);
-        if (this.getTeams().get(this.teamCount() - 1).getManager().getName().equals("Ghost manager")) {
-            return true;
+       for (Team team : this.getTeams()){
+           if (team.getManager().getName().equals("Ghost manager")){
+               return true;
+           }
         }
         return false;
     }
 
     public boolean ghostInNewLeague(){
-        this.generateFixtures(true);
         if (this.getTeams().get(0).getManager().getName().equals("Ghost manager")) {
             return true;
         }
         return false;
     }
 }
-
-
-
-
-
-

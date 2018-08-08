@@ -42,7 +42,7 @@
     <div class = "dropdown">
         <button class="dropbtn"> Match Reports</button>
         <div class="dropdown-content">
-            <a href ="/matchreports"> All Match reports</a>
+            <a href ="/matchreports"> All match reports</a>
 
         </div>
     </div>
@@ -51,6 +51,9 @@
         <button class="dropbtn">Fixtures and Results</button>
         <div class="dropdown-content">
     <a href="/fixtures" class="button center"> All Fixtures</a>
+            #foreach ($league in $leagues)
+            <a href="/$league.getId()/fixtures" class="button center"> $league.getName()'s fixtures and results</a>
+            #end
         </div>
     </div>
 

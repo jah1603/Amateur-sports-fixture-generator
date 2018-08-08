@@ -7,6 +7,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,13 @@ public class Fixture {
     private String venue;
     private MatchReport matchReport;
     private League league;
+    private Team homeTeam;
+    private Team awayTeam;
 
     public Fixture() {
     }
 
-    public Fixture(int week, Integer match, League league) {
+    public Fixture(int week, Integer match, League league, Team homeTeam, Team awayTeam) {
         this.teams = new ArrayList<Team>();
         this.homeGoals = "";
         this.awayGoals = "";
@@ -34,6 +37,8 @@ public class Fixture {
         this.match = match;
         this.league = league;
         this.venue = venue;
+        this.homeTeam = new FootballTeam();
+        this.awayTeam = new FootballTeam();
     }
 
     @Id
@@ -64,7 +69,7 @@ public class Fixture {
     }
 
     public void setTeams(List<Team> teams) {
-        this.teams = teams;
+        this.teams = Collections.synchronizedList(teams);
     }
 
     @Column(name = "home_goals")
@@ -143,6 +148,27 @@ public class Fixture {
         this.teams.add(awayTeam);
     }
 
+    @ManyToOne
+    @JoinColumn(name="home_team_id")
+    @Fetch(FetchMode.SELECT)
+    public Team getHomeTeam() {
+        return homeTeam;
+    }
+
+    public void setHomeTeam(Team homeTeam) {
+        this.homeTeam = homeTeam;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="away_team_id")
+    @Fetch(FetchMode.SELECT)
+    public Team getAwayTeam() {
+        return awayTeam;
+    }
+
+    public void setAwayTeam(Team awayTeam) {
+        this.awayTeam = awayTeam;
+    }
 
     public void addHomeTeamToFixture(Team homeTeam) {
         this.teams.add(homeTeam);
@@ -157,28 +183,38 @@ public class Fixture {
     }
 
     public Team returnHomeTeam() {
-        return this.teams.get(0);
+        return this.homeTeam;
     }
 
     public Team returnAwayTeam() {
-        return this.teams.get(1);
+        return this.awayTeam;
     }
 
 
     public void inputGoalsToGenerateResult(int homeGoals, int awayGoals) {
         if (homeGoals > awayGoals) {
-            teams.get(0).addPointsToTeam(3);
-            teams.get(0).incrementWins();
-            teams.get(1).incrementLosses();
+            homeTeam.addPointsToTeam(3);
+            homeTeam.incrementWins();
+            awayTeam.incrementLosses();
+//            teams.get(0).addPointsToTeam(3);
+//            teams.get(0).incrementWins();
+//            teams.get(1).incrementLosses();
         } else if (awayGoals > homeGoals) {
-            teams.get(1).addPointsToTeam(3);
-            teams.get(1).incrementWins();
-            teams.get(0).incrementLosses();
+            awayTeam.addPointsToTeam(3);
+            awayTeam.incrementWins();
+            homeTeam.incrementLosses();
+//            teams.get(1).addPointsToTeam(3);
+//            teams.get(1).incrementWins();
+//            teams.get(0).incrementLosses();
         } else {
-            teams.get(0).addPointsToTeam(1);
-            teams.get(1).addPointsToTeam(1);
-            teams.get(0).incrementDraws();
-            teams.get(1).incrementDraws();
+//            teams.get(0).addPointsToTeam(1);
+//            teams.get(1).addPointsToTeam(1);
+//            teams.get(0).incrementDraws();
+//            teams.get(1).incrementDraws();
+            homeTeam.addPointsToTeam(1);
+            awayTeam.addPointsToTeam(1);
+            homeTeam.incrementDraws();
+            awayTeam.incrementDraws();
 
         }
 
@@ -187,8 +223,10 @@ public class Fixture {
 
     public void updateGamesPlayed(String homeGoals, String awayGoals) {
         if (homeGoals != "") {
-            teams.get(0).incrementGamesPlayed();
-            teams.get(1).incrementGamesPlayed();
+//            teams.get(0).incrementGamesPlayed();
+////            teams.get(1).incrementGamesPlayed();
+            homeTeam.incrementGamesPlayed();
+            awayTeam.incrementGamesPlayed();
         }
 
 

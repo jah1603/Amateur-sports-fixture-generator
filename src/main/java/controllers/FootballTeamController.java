@@ -227,6 +227,11 @@ public class FootballTeamController {
             Map<String, Object> model = new HashMap<>();
             int footballTeamId = Integer.parseInt(req.params(":id"));
             FootballTeam footballTeam = DBHelper.find(footballTeamId, FootballTeam.class);
+
+            List<League> allLeauges = DBHelper.getAll(League.class);
+            model.put("leagues", allLeauges);
+
+
 //            int leagueId = Integer.parseInt(req.queryParams("league"));
             //find league by id
             List<League> league = DBHelper.getAll(League.class);
@@ -302,5 +307,3 @@ public class FootballTeamController {
 
     }
 }
-
-

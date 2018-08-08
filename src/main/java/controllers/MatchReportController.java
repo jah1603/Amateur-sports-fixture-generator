@@ -1,7 +1,9 @@
 package controllers;
 
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
+import db.DBFixture;
 import db.DBHelper;
+import db.DBLeague;
 import models.*;
 import models.MatchReport;
 import spark.ModelAndView;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static db.DBLeague.getFixturesForLeague;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -30,6 +33,9 @@ public class MatchReportController {
 
             List<MatchReport> matchreports = DBHelper.getAll(MatchReport.class);
             model.put("matchreports", matchreports);
+
+            List<League> allLeauges = DBHelper.getAll(League.class);
+            model.put("leagues", allLeauges);
 
             List<Fixture> fixtureGhostsToKill = new ArrayList<>();
 

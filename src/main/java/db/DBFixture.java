@@ -56,8 +56,8 @@ public class DBFixture {
 
     public static List<Fixture> sortLeaguesFixturesByWeeks(League league) {
 
-        List<Fixture> fixture = null;
         session = HibernateUtil.getSessionFactory().openSession();
+        List<Fixture> fixture = null;
         try {
             Criteria cr = session.createCriteria(Fixture.class);
             cr.add(Restrictions.eq("league", league));
@@ -68,6 +68,9 @@ public class DBFixture {
             e.printStackTrace();
         } finally {
             session.close();
+        }
+        for (Fixture f : fixture){
+            f.setLeague(league);
         }
         return fixture;
     }
@@ -90,4 +93,3 @@ public class DBFixture {
 
 
 }
-

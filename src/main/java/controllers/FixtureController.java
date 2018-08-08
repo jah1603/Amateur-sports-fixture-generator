@@ -29,6 +29,10 @@ public class FixtureController {
             model.put("template", "templates/fixtures/index.vtl");
 
             List<Fixture> fixtures = DBFixture.sortFixturesByWeeks();
+            for (Fixture f : fixtures){
+                f.setLeague(f.getLeague());
+            }
+
             model.put("fixtures", fixtures);
 
             for (Fixture fixture: fixtures){
@@ -64,26 +68,31 @@ public class FixtureController {
             HashMap<String, Object> model = new HashMap<>();
             model.put("template", "templates/fixtures/leagueindex.vtl");
 
-            List<Fixture> fixtures = DBFixture.sortFixturesByWeeks();
-
-
-            for (Fixture fixture: fixtures){
-                fixture.setMatch(fixture.getMatch() - 1);
-            }
-
-            model.put("fixtures", fixtures);
 
             int leagueId = Integer.parseInt(req.params(":id"));
             League league = DBHelper.find(leagueId, League.class);
 
             model.put("league", league);
 
-            List <League> allLeagues = DBHelper.getAll(League.class);
-            model.put("allLeagues", allLeagues);
+            List <League> leagues = DBHelper.getAll(League.class);
+            model.put("leagues", leagues);
 
-            List <Fixture> leaguesFixtures = league.getFixtures();
-
+            List <Fixture> leaguesFixtures = DBLeague.getFixturesForLeague(league);
             model.put("leaguesFixtures", leaguesFixtures);
+
+            for (Fixture fixture: leaguesFixtures){
+                if (fixture.getLeague().ghostInLeague())
+                {
+                    fixture.setMatch(fixture.getMatch() - 1);
+                }
+            }
+
+            for (Fixture fixture: leaguesFixtures){
+                if (fixture.getLeague().ghostInNewLeague())
+                {
+                    fixture.setMatch(fixture.getMatch() - 1);
+                }
+            }
 
 
             List<MatchReport> matchReports = DBHelper.getAll(MatchReport.class);
@@ -118,6 +127,8 @@ public class FixtureController {
             awayTeam.setGoalsScored(Integer.parseInt(awaygoals));
             homeTeam.setGoalsConceded(Integer.parseInt(awaygoals));
             awayTeam.setGoalsConceded(Integer.parseInt(homegoals));
+            homeTeam.setGoalDifference(homeTeam.getGoalsScored() - homeTeam.getGoalsConceded());
+            awayTeam.setGoalDifference(awayTeam.getGoalsScored() - awayTeam.getGoalsConceded());
             fixture.inputGoalsToGenerateResult(Integer.parseInt(homegoals), Integer.parseInt(awaygoals));
 
             fixture.updateGamesPlayed(homegoals,awaygoals);
@@ -173,11 +184,15 @@ public class FixtureController {
             awayTeam.setGoalsScored(Integer.parseInt(awaygoals));
             homeTeam.setGoalsConceded(Integer.parseInt(awaygoals));
             awayTeam.setGoalsConceded(Integer.parseInt(homegoals));
+            homeTeam.setGoalDifference(homeTeam.getGoalsScored() - homeTeam.getGoalsConceded());
+            awayTeam.setGoalDifference(awayTeam.getGoalsScored() - awayTeam.getGoalsConceded());
             fixture.inputGoalsToGenerateResult(Integer.parseInt(homegoals), Integer.parseInt(awaygoals));
 
             fixture.updateGamesPlayed(homegoals,awaygoals);
 
-            fixture.updateGamesPlayed(homegoals, awaygoals);
+
+            DBHelper.update(homeTeam);
+            DBHelper.update(awayTeam);
 
 
             DBHelper.update(homeTeam);
@@ -188,7 +203,7 @@ public class FixtureController {
             DBHelper.update(league);
 
 
-            res.redirect("/" +leagueId + "/fixture");
+            res.redirect("/" +leagueId + "/fixtures");
             return null;
         }, velocityTemplateEngine);
 
@@ -201,6 +216,3 @@ public class FixtureController {
 
 
 }
-
-
-

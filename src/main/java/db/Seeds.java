@@ -8,12 +8,8 @@ public class Seeds {
 
     public static void seedData() {
 
-        DBHelper.deleteAll(Manager.class);
-        DBHelper.deleteAll(Team.class);
         DBHelper.deleteAll(FootballTeam.class);
         DBHelper.deleteAll(MatchReport.class);
-        DBHelper.deleteAll(League.class);
-        DBHelper.deleteAll(Fixture.class);
         DBHelper.deleteAll(League.class);
         DBHelper.deleteAll(Fixture.class);
         DBHelper.deleteAll(Manager.class);
@@ -84,8 +80,9 @@ public class Seeds {
 
         League league2 = new League("Highland Schools Hockey Championship", LeagueType.SCHOOLS, "Highlands and Islands");
 
-        league.addToTeams(awayfootballTeam);
+
         league.addToTeams(homefootballTeam);
+        league.addToTeams(awayfootballTeam);
         league.addToTeams(thirdFootballTeam);
         league.addToTeams(fourthfootballTeam);
         league.addToTeams(fithfootballTeam);
@@ -97,7 +94,7 @@ public class Seeds {
 
 
         league.generateFixtures(true);
-        DBHelper.update(league);
+//        DBHelper.update(league);
 
         for (Fixture fixture : league.getFixtures()) {
             DBHelper.save(fixture);
@@ -113,76 +110,85 @@ public class Seeds {
 //        f.setMatchReport(report1);
 //        DBHelper.update(f);
 
-        List<Fixture> allFixtures = DBHelper.getAll(Fixture.class);
-        List<Fixture> sortedFix = DBFixture.sortFixturesByWeeks();
-
-
-        Fixture fixtureForFirstReport = sortedFix.get(1);
-        Fixture fixtureForSecondReport = sortedFix.get(2);
-        MatchReport reportForSite = new MatchReport(fixtureForFirstReport, "Experienced Wanderers side make light work of Highland upstarts.", "Selkirk: Spencer-Clark (1), Lowe (2)", "");
-        MatchReport secondReportForSite = new MatchReport(fixtureForSecondReport, "League minnows play out a drab stalemate as the relegation dogfight gets into full swing.", "Broxburn Albion: Davies (red card)", "");
-       reportForSite.setFixture(fixtureForFirstReport);
-        secondReportForSite.setFixture(fixtureForSecondReport);
-        DBHelper.save(reportForSite);
-        DBHelper.save(secondReportForSite);
-        fixtureForFirstReport.setMatchReport(reportForSite);
-        fixtureForSecondReport.setMatchReport(secondReportForSite);
-        DBHelper.update(fixtureForFirstReport);
-        DBHelper.update(fixtureForSecondReport);
-        fixtureForFirstReport.setHomeGoals("3");
-        fixtureForFirstReport.setAwayGoals("0");
-        fixtureForSecondReport.setHomeGoals("0");
-        fixtureForSecondReport.setAwayGoals("0");
-        FootballTeam homeTeam = (FootballTeam)fixtureForFirstReport.returnHomeTeam();
-        FootballTeam awayTeam = (FootballTeam)fixtureForFirstReport.returnAwayTeam();
-        FootballTeam homeTeam2 = (FootballTeam)fixtureForSecondReport.returnHomeTeam();
-        FootballTeam awayTeam2 = (FootballTeam)fixtureForSecondReport.returnAwayTeam();
-
-        homeTeam.setGoalsScored(Integer.parseInt(fixtureForFirstReport.getHomeGoals()));
-        homeTeam2.setGoalsScored(Integer.parseInt(fixtureForSecondReport.getHomeGoals()));
-        awayTeam.setGoalsScored(Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
-        awayTeam2.setGoalsScored(Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
-        homeTeam.setGoalsConceded(Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
-        homeTeam2.setGoalsConceded(Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
-        awayTeam.setGoalsConceded(Integer.parseInt(fixtureForFirstReport.getHomeGoals()));
-        awayTeam2.setGoalsConceded(Integer.parseInt(fixtureForSecondReport.getHomeGoals()));
-
-        fixtureForFirstReport.inputGoalsToGenerateResult(Integer.parseInt(fixtureForFirstReport.getHomeGoals()), Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
-        fixtureForSecondReport.inputGoalsToGenerateResult(Integer.parseInt(fixtureForSecondReport.getHomeGoals()), Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
-
-        fixtureForFirstReport.updateGamesPlayed(fixtureForFirstReport.getHomeGoals(), fixtureForFirstReport.getAwayGoals());
-        fixtureForSecondReport.updateGamesPlayed(fixtureForSecondReport.getHomeGoals(), fixtureForSecondReport.getAwayGoals());
-
-        DBHelper.update(fixtureForFirstReport);
-        DBHelper.update(fixtureForSecondReport);
-
-        DBHelper.update(league);
-
-
-
-        List<Manager> allManagers = DBHelper.getAll(Manager.class);
-        List<MatchReport> allReports = DBHelper.getAll(MatchReport.class);
-        List<FootballTeam> allFootballTeams = DBHelper.getAll(FootballTeam.class);
-        List<League> allLeagues = DBHelper.getAll(League.class);
-
-        Manager foundManager = DBHelper.find(manager.getId(), Manager.class);
-
-        List<Fixture> FixturesForOurLeague = DBLeague.getFixturesForLeague(league);
-
-
-
-//        DBLeague.getFullSeasonFixtures(2, league);
-
-        List<Fixture> updatedLeagueFixtures = DBLeague.getFixturesForLeague(league);
-
-        List<Manager> managers = DBHelper.getAll(Manager.class);
-
-//        //CHECK SORTED LEAGUE
-//        eighthfootballTeam.setPoints(20);
-//        DBHelper.update(eighthfootballTeam);
-//        fithfootballTeam.setPoints(10);
-//        DBHelper.update(fithfootballTeam);
-//        List<Team> sortedLeague = DBLeague.sortLeagueByPoints(league);
+//        List<Fixture> allFixtures = DBHelper.getAll(Fixture.class);
+//        List<Fixture> sortedFix = DBFixture.sortFixturesByWeeks();
+////
+////
+//        Fixture fixtureForFirstReport = sortedFix.get(1);
+//        Fixture fixtureForSecondReport = sortedFix.get(2);
+//        MatchReport reportForSite = new MatchReport(fixtureForFirstReport, "Experienced Wanderers side make light work of Highland upstarts.", "Selkirk: Spencer-Clark (1), Lowe (2)", "");
+//        MatchReport secondReportForSite = new MatchReport(fixtureForSecondReport, "League minnows play out a drab stalemate as the relegation dogfight gets into full swing.", "Broxburn Albion: Davies (red card)", "");
+//       reportForSite.setFixture(fixtureForFirstReport);
+//        secondReportForSite.setFixture(fixtureForSecondReport);
+//        DBHelper.save(reportForSite);
+//        DBHelper.save(secondReportForSite);
+//        fixtureForFirstReport.setMatchReport(reportForSite);
+//        fixtureForSecondReport.setMatchReport(secondReportForSite);
+//        DBHelper.update(fixtureForFirstReport);
+//        DBHelper.update(fixtureForSecondReport);
+//        fixtureForFirstReport.setHomeGoals("3");
+//        fixtureForFirstReport.setAwayGoals("0");
+//        fixtureForSecondReport.setHomeGoals("0");
+//        fixtureForSecondReport.setAwayGoals("0");
+//        FootballTeam homeTeam = (FootballTeam)fixtureForFirstReport.returnHomeTeam();
+//        FootballTeam awayTeam = (FootballTeam)fixtureForFirstReport.returnAwayTeam();
+//        FootballTeam homeTeam2 = (FootballTeam)fixtureForSecondReport.returnHomeTeam();
+//        FootballTeam awayTeam2 = (FootballTeam)fixtureForSecondReport.returnAwayTeam();
+//
+//        homeTeam.setGoalsScored(Integer.parseInt(fixtureForFirstReport.getHomeGoals()));
+//        homeTeam2.setGoalsScored(Integer.parseInt(fixtureForSecondReport.getHomeGoals()));
+//        awayTeam.setGoalsScored(Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
+//        awayTeam2.setGoalsScored(Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
+//        homeTeam.setGoalsConceded(Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
+//        homeTeam2.setGoalsConceded(Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
+//        awayTeam.setGoalsConceded(Integer.parseInt(fixtureForFirstReport.getHomeGoals()));
+//        awayTeam2.setGoalsConceded(Integer.parseInt(fixtureForSecondReport.getHomeGoals()));
+//
+//        homeTeam.setGoalDifference(homeTeam.getGoalsScored() - homeTeam.getGoalsConceded());
+//        awayTeam.setGoalDifference(awayTeam.getGoalsScored() - awayTeam.getGoalsConceded());
+//        homeTeam2.setGoalDifference(homeTeam2.getGoalsScored() - homeTeam2.getGoalsConceded());
+//        awayTeam2.setGoalDifference(awayTeam2.getGoalsScored() - awayTeam2.getGoalsConceded());
+//        DBHelper.update(homeTeam);
+//        DBHelper.update(homeTeam2);
+//        DBHelper.update(awayTeam);
+//        DBHelper.update(awayTeam2);
+//
+//        fixtureForFirstReport.inputGoalsToGenerateResult(Integer.parseInt(fixtureForFirstReport.getHomeGoals()), Integer.parseInt(fixtureForFirstReport.getAwayGoals()));
+//        fixtureForSecondReport.inputGoalsToGenerateResult(Integer.parseInt(fixtureForSecondReport.getHomeGoals()), Integer.parseInt(fixtureForSecondReport.getAwayGoals()));
+//
+//        fixtureForFirstReport.updateGamesPlayed(fixtureForFirstReport.getHomeGoals(), fixtureForFirstReport.getAwayGoals());
+//        fixtureForSecondReport.updateGamesPlayed(fixtureForSecondReport.getHomeGoals(), fixtureForSecondReport.getAwayGoals());
+//
+//        DBHelper.update(fixtureForFirstReport);
+//        DBHelper.update(fixtureForSecondReport);
+//
+//        DBHelper.update(league);
+//
+//
+//
+//        List<Manager> allManagers = DBHelper.getAll(Manager.class);
+//        List<MatchReport> allReports = DBHelper.getAll(MatchReport.class);
+//        List<FootballTeam> allFootballTeams = DBHelper.getAll(FootballTeam.class);
+//        List<League> allLeagues = DBHelper.getAll(League.class);
+//
+//        Manager foundManager = DBHelper.find(manager.getId(), Manager.class);
+//
+//        List<Fixture> FixturesForOurLeague = DBLeague.getFixturesForLeague(league);
+//
+//
+//
+////        DBLeague.getFullSeasonFixtures(2, league);
+//
+//        List<Fixture> updatedLeagueFixtures = DBLeague.getFixturesForLeague(league);
+//
+//        List<Manager> managers = DBHelper.getAll(Manager.class);
+//
+////        //CHECK SORTED LEAGUE
+////        eighthfootballTeam.setPoints(20);
+////        DBHelper.update(eighthfootballTeam);
+////        fithfootballTeam.setPoints(10);
+////        DBHelper.update(fithfootballTeam);
+////        List<Team> sortedLeague = DBLeague.sortLeagueByPoints(league);
 
 
     }
