@@ -26,10 +26,13 @@ public abstract class Team {
     private Integer gamesLost;
     private Integer gamesDrawn;
     private Integer gamesPlayed;
+    private Integer leaguePosition;
     private String teamLogo;
     private String homePitch;
     private String location;
     private List<Fixture> fixtures;
+    private List<Fixture> homeFixtures;
+    private List<Fixture> awayFixtures;
 
     public Team(){}
 
@@ -42,6 +45,7 @@ public abstract class Team {
         this.gamesLost = 0;
         this.gamesDrawn = 0;
         this.gamesPlayed = 0;
+        this.leaguePosition = null;
         this.teamLogo = teamLogo;
         this.location = location;
         this.fixtures = new ArrayList<Fixture>();
@@ -139,8 +143,12 @@ public abstract class Team {
         this.fixtures = fixtures;
     }
 
+    public void addFixture(Fixture fixture){
+        fixtures.add(fixture);
+    }
+
     public void addPointsToTeam(int points){
-     this.points += points;
+        this.points += points;
     }
 
     public void incrementWins(){
@@ -195,5 +203,33 @@ public abstract class Team {
         this.gamesPlayed = gamesPlayed;
     }
 
+    public Integer getLeaguePosition() {
+        return leaguePosition;
+    }
 
+    public void setLeaguePosition(Integer leaguePosition) {
+        this.leaguePosition = leaguePosition;
+    }
+
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(mappedBy="homeTeam")
+    @Fetch(FetchMode.SELECT)
+    public List<Fixture> getHomeFixtures() {
+        return homeFixtures;
+    }
+
+    public void setHomeFixtures(List<Fixture> homeFixtures) {
+        this.homeFixtures = homeFixtures;
+    }
+
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(mappedBy="awayTeam")
+    @Fetch(FetchMode.SELECT)
+    public List<Fixture> getAwayFixtures() {
+        return awayFixtures;
+    }
+
+    public void setAwayFixtures(List<Fixture> awayFixtures) {
+        this.awayFixtures = awayFixtures;
+    }
 }

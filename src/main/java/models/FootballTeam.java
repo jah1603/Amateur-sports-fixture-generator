@@ -1,5 +1,7 @@
 package models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,12 +10,14 @@ import javax.persistence.*;
 public class FootballTeam extends Team {
     private int goalsScored;
     private int goalsConceded;
+    private Integer goalDifference;
 
 
     public FootballTeam(String name, Manager manager, League league, String teamLogo, String location){
         super(name, manager,league,teamLogo,location);
         this.goalsScored = 0;
         this.goalsConceded = 0;
+        this.goalDifference = 0;
     }
 
     public FootballTeam(){};
@@ -24,7 +28,7 @@ public class FootballTeam extends Team {
     }
 
     public void setGoalsScored(int goalsScored) {
-        this.goalsScored = goalsScored;
+        this.goalsScored += goalsScored;
     }
 
     @Column(name = "goals_conceded")
@@ -33,10 +37,19 @@ public class FootballTeam extends Team {
     }
 
     public void setGoalsConceded(int goalsConceded) {
-        this.goalsConceded = goalsConceded;
+        this.goalsConceded += goalsConceded;
     }
 
-    public int goalDifference(){
-        return this.goalsScored - this.goalsConceded;
+    @Column(name = "goal_difference")
+    public Integer getGoalDifference(){
+        return this.goalDifference;
     }
+
+    public void setGoalDifference(Integer goalDifference){
+        this.goalDifference = goalDifference;
+    }
+
+//    public void setGoalDifference(Integer goalDifference) {
+////        this.goalDifference = goalDifference;
+////    }
 }
