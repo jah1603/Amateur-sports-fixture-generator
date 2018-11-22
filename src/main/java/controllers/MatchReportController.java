@@ -104,7 +104,7 @@ public class MatchReportController {
 
             HashMap<String, Object> model = new HashMap<>();
 
-           fixture.setMatch(fixture.getMatch()-1);
+            fixture.setMatch(fixture.getMatch()-1);
 
             model.put("fixture", fixture);
 
@@ -130,14 +130,15 @@ public class MatchReportController {
             String picture = req.queryParams("picture");
 
             MatchReport newMatchReport = new MatchReport( fixture, headline, blurb, picture);
-            DBHelper.save(newMatchReport);
+
             fixture.setMatchReport(newMatchReport);
 
             newMatchReport.setFixture(fixture);
+            DBHelper.save(newMatchReport);
 
             fixture.setMatch(fixture.getMatch()-1);
 
-            res.redirect("/fixtures");
+            res.redirect("/matchreports");
             return null;
         }, velocityTemplateEngine);
 
